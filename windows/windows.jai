@@ -3975,25 +3975,6 @@ SDL_sscanf :: (text: *u8, fmt: string, __args: ..Any) -> s32 {
 } @PrintLike
 
 /**
-* This works exactly like vsscanf() but doesn't require access to a C
-* runtime.
-*
-* Functions identically to SDL_sscanf(), except it takes a `va_list` instead
-* of using `...` variable arguments.
-*
-* \param text the string to scan. Must not be NULL.
-* \param fmt a printf-style format string. Must not be NULL.
-* \param ap a `va_list` of pointers to values to be filled in with scanned
-*           items.
-* \returns the number of items that matched the format string.
-*
-* \threadsafety It is safe to call this function from any thread.
-*
-* \since This function is available since SDL 3.2.0.
-*/
-SDL_vsscanf :: (text: *u8, fmt: *u8, ap: va_list) -> s32 #foreign sdl3;
-
-/**
 * This works exactly like snprintf() but doesn't require access to a C
 * runtime.
 *
@@ -4069,47 +4050,6 @@ SDL_snprintf :: (text: *u8, maxlen: u64, fmt: string, __args: ..Any) -> s32 {
 SDL_swprintf :: (text: *u16, maxlen: u64, fmt: *u16, __args: ..Any) -> s32 #foreign sdl3;
 
 /**
-* This works exactly like vsnprintf() but doesn't require access to a C
-* runtime.
-*
-* Functions identically to SDL_snprintf(), except it takes a `va_list`
-* instead of using `...` variable arguments.
-*
-* \param text the buffer to write the string into. Must not be NULL.
-* \param maxlen the maximum bytes to write, including the null-terminator.
-* \param fmt a printf-style format string. Must not be NULL.
-* \param ap a `va_list` values to be used with the format string.
-* \returns the number of bytes that should be written, not counting the
-*          null-terminator char, or a negative value on error.
-*
-* \threadsafety It is safe to call this function from any thread.
-*
-* \since This function is available since SDL 3.2.0.
-*/
-SDL_vsnprintf :: (text: *u8, maxlen: u64, fmt: *u8, ap: va_list) -> s32 #foreign sdl3;
-
-/**
-* This works exactly like vswprintf() but doesn't require access to a C
-* runtime.
-*
-* Functions identically to SDL_swprintf(), except it takes a `va_list`
-* instead of using `...` variable arguments.
-*
-* \param text the buffer to write the string into. Must not be NULL.
-* \param maxlen the maximum wide characters to write, including the
-*               null-terminator.
-* \param fmt a printf-style format wide string. Must not be NULL.
-* \param ap a `va_list` values to be used with the format string.
-* \returns the number of wide characters that should be written, not counting
-*          the null-terminator char, or a negative value on error.
-*
-* \threadsafety It is safe to call this function from any thread.
-*
-* \since This function is available since SDL 3.2.0.
-*/
-SDL_vswprintf :: (text: *u16, maxlen: u64, fmt: *u16, ap: va_list) -> s32 #foreign sdl3;
-
-/**
 * This works exactly like asprintf() but doesn't require access to a C
 * runtime.
 *
@@ -4145,25 +4085,6 @@ SDL_asprintf :: (strp: **u8, fmt: string, __args: ..Any) -> s32 {
     formatted_text := builder_to_string(*formatted_text_builder);
     return SDL_asprintf_CFormat(strp, "%s", formatted_text.data);
 } @PrintLike
-
-/**
-* This works exactly like vasprintf() but doesn't require access to a C
-* runtime.
-*
-* Functions identically to SDL_asprintf(), except it takes a `va_list`
-* instead of using `...` variable arguments.
-*
-* \param strp on output, is set to the new string. Must not be NULL.
-* \param fmt a printf-style format string. Must not be NULL.
-* \param ap a `va_list` values to be used with the format string.
-* \returns the number of bytes in the newly-allocated string, not counting
-*          the null-terminator char, or a negative value on error.
-*
-* \threadsafety It is safe to call this function from any thread.
-*
-* \since This function is available since SDL 3.2.0.
-*/
-SDL_vasprintf :: (strp: **u8, fmt: *u8, ap: va_list) -> s32 #foreign sdl3;
 
 /**
 * Seeds the pseudo-random number generator.
@@ -6784,25 +6705,6 @@ SDL_SetError :: (fmt: string, __args: ..Any) -> bool {
 } @PrintLike
 
 /**
-* Set the SDL error message for the current thread.
-*
-* Calling this function will replace any previous error message that was set.
-*
-* \param fmt a printf()-style message format string.
-* \param ap a variable argument list.
-* \returns false.
-*
-* \threadsafety It is safe to call this function from any thread.
-*
-* \since This function is available since SDL 3.2.0.
-*
-* \sa SDL_ClearError
-* \sa SDL_GetError
-* \sa SDL_SetError
-*/
-SDL_SetErrorV :: (fmt: *u8, ap: va_list) -> bool #foreign sdl3;
-
-/**
 * Set an error indicating that memory allocation failed.
 *
 * This function does not do any memory allocation.
@@ -8933,26 +8835,6 @@ SDL_IOprintf :: (_context: *SDL_IOStream, fmt: string, __args: ..Any) -> u64 {
     formatted_text := builder_to_string(*formatted_text_builder);
     return SDL_IOprintf_CFormat(_context, "%s", formatted_text.data);
 } @PrintLike
-
-/**
-* Print to an SDL_IOStream data stream.
-*
-* This function does formatted printing to the stream.
-*
-* \param context a pointer to an SDL_IOStream structure.
-* \param fmt a printf() style format string.
-* \param ap a variable argument list.
-* \returns the number of bytes written or 0 on failure; call SDL_GetError()
-*          for more information.
-*
-* \threadsafety This function is not thread safe.
-*
-* \since This function is available since SDL 3.2.0.
-*
-* \sa SDL_IOprintf
-* \sa SDL_WriteIO
-*/
-SDL_IOvprintf :: (_context: *SDL_IOStream, fmt: *u8, ap: va_list) -> u64 #foreign sdl3;
 
 /**
 * Flush any buffered data in the stream.
@@ -31567,30 +31449,6 @@ SDL_LogMessage :: (category: s32, priority: SDL_LogPriority, fmt: string, __args
 } @PrintLike
 
 /**
-* Log a message with the specified category and priority.
-*
-* \param category the category of the message.
-* \param priority the priority of the message.
-* \param fmt a printf() style message format string.
-* \param ap a variable argument list.
-*
-* \threadsafety It is safe to call this function from any thread.
-*
-* \since This function is available since SDL 3.2.0.
-*
-* \sa SDL_Log
-* \sa SDL_LogCritical
-* \sa SDL_LogDebug
-* \sa SDL_LogError
-* \sa SDL_LogInfo
-* \sa SDL_LogMessage
-* \sa SDL_LogTrace
-* \sa SDL_LogVerbose
-* \sa SDL_LogWarn
-*/
-SDL_LogMessageV :: (category: s32, priority: SDL_LogPriority, fmt: *u8, ap: va_list) -> void #foreign sdl3;
-
-/**
 * The prototype for the log output callback function.
 *
 * This function is called by SDL when there is new text to be logged. A mutex
@@ -36319,4 +36177,4 @@ SDL_GetRevision :: () -> *u8 #foreign sdl3;
 
 #import "Basic"; // For push_context
 
-sdl :: #library,no_dll "bin/x64/SDL3";
+sdl3 :: #library,no_dll "bin/x64/SDL3";

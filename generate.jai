@@ -50,22 +50,22 @@ generate_bindings :: () -> bool {
 
     {
         using opts;
+        strip_flags = .FUNCTIONS_WITH_VALIST;
 
         #if OS == .WINDOWS {
-            strip_flags = 0;
             output_filename = "windows/windows.jai";
 
             #if CPU == .X64 {
 
                 FOOTER :: #string EOF
-sdl :: #library,no_dll "bin/x64/SDL3";
+sdl3 :: #library,no_dll "bin/x64/SDL3";
 EOF
                 array_add(*libpaths, "windows/bin/x64");
 
             } else #if CPU == .ARM64 {
 
                 FOOTER :: #string EOF
-sdl :: #library,no_dll "bin/arm64/SDL3";
+sdl3 :: #library,no_dll "bin/arm64/SDL3";
 EOF
 
                 array_add(*libpaths, "windows/bin/arm64");
