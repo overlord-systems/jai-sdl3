@@ -1,11 +1,6 @@
 #import "Basic";
 #import,file "../windows/windows.jai";
 
-/*
-Missing enums:
-- https://wiki.libsdl.org/SDL3/SDL_WindowFlags
-*/
-
 main :: () {
 
     success := SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -13,7 +8,7 @@ main :: () {
 
     window: *SDL_Window;
     renderer: *SDL_Renderer;
-    success = SDL_CreateWindowAndRenderer("SDL3 from Jai", 1920, 1080, 0, *window, *renderer);
+    success = SDL_CreateWindowAndRenderer("SDL3 from Jai", 1920, 1080, SDL_WINDOW_VULKAN, *window, *renderer);
     print("sdl3 window create status = %\n", success);
 
     is_running := true;

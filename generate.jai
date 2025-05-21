@@ -12,43 +12,13 @@ build :: () {
     }
 }
 
-DECLARATIONS_TO_OMIT :: string.[
-    "_m_prefetch",
-    "__debugbreak",
-
-    /*
-    Those are force inlined functions defined in the headers, so they don't appear in the library and so bindings generator complains.
-
-    One way is to automatically remove inline, compile them into a DLL, and turn them into #c_call jai procs. However, this loses inline.
-
-    The performant way is to rewrite them in pure jai code, however that introduces overhead of ensuring they are updated.
-    */
-    "SDL_size_mul_check_overflow",
-    "SDL_size_mul_check_overflow_builtin",
-    "SDL_size_add_check_overflow",
-    "SDL_size_add_check_overflow_builtin",
-    "SDL_SwapFloat",
-    "SDL_MostSignificantBitIndex32",
-    "SDL_HasExactlyOneBitSet32",
-    "SDL_RectToFRect",
-    "SDL_PointInRect",
-    "SDL_RectEmpty",
-    "SDL_RectsEqual",
-    "SDL_PointInRectFloat",
-    "SDL_RectEmptyFloat",
-    "SDL_RectsEqualEpsilon",
-    "SDL_RectsEqualFloat",
-];
-
-ENUMS_TO_OMIT :: string.[
-];
-
 generate_bindings :: () -> bool {
 
     output_filename: string;
     opts: Generate_Bindings_Options;
 
     {
+        opts.header = HEADER;
         opts.strip_flags = .FUNCTIONS_WITH_VALIST;
 
         #if OS == .WINDOWS {
@@ -111,11 +81,6 @@ sdl3_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_V
         return .STOP;
     }
 
-    if decl.kind == .ENUM && array_find(ENUMS_TO_OMIT, decl.name) {
-        decl.decl_flags |= .OMIT_FROM_OUTPUT;
-        return .STOP;
-    }
-
     return .RECURSE;
 }
 
@@ -127,3 +92,66 @@ sdl3_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_V
 #import "Check";
 #import "Bindings_Generator";
 #import "File";
+
+DECLARATIONS_TO_OMIT :: string.[
+    "_m_prefetch",
+    "__debugbreak",
+
+    /*
+    Those are force inlined functions defined in the headers, so they don't appear in the library and so bindings generator complains.
+
+    One way is to automatically remove inline, compile them into a DLL, and turn them into #c_call jai procs. However, this loses inline.
+
+    The performant way is to rewrite them in pure jai code, however that introduces overhead of ensuring they are updated.
+    */
+    "SDL_size_mul_check_overflow",
+    "SDL_size_mul_check_overflow_builtin",
+    "SDL_size_add_check_overflow",
+    "SDL_size_add_check_overflow_builtin",
+    "SDL_SwapFloat",
+    "SDL_MostSignificantBitIndex32",
+    "SDL_HasExactlyOneBitSet32",
+    "SDL_RectToFRect",
+    "SDL_PointInRect",
+    "SDL_RectEmpty",
+    "SDL_RectsEqual",
+    "SDL_PointInRectFloat",
+    "SDL_RectEmptyFloat",
+    "SDL_RectsEqualEpsilon",
+    "SDL_RectsEqualFloat",
+];
+
+/*
+The header contains things not yet supported by bindings generator like the SDL_WindowFlags set of enums, as they use macros calling system macros.
+
+These should rarely changed, but last checked for SDL 3.2.14
+*/
+HEADER :: #string EOF
+
+// From https://wiki.libsdl.org/SDL3/SDL_WindowFlags
+SDL_WINDOW_FULLSCREEN           : SDL_WindowFlags : 0x0000000000000001;    /**< window is in fullscreen mode */
+SDL_WINDOW_OPENGL               : SDL_WindowFlags : 0x0000000000000002;    /**< window usable with OpenGL context */
+SDL_WINDOW_OCCLUDED             : SDL_WindowFlags : 0x0000000000000004;    /**< window is occluded */
+SDL_WINDOW_HIDDEN               : SDL_WindowFlags : 0x0000000000000008;    /**< window is neither mapped onto the desktop nor shown in the taskbar/dock/window list; SDL_ShowWindow() is required for it to become visible */
+SDL_WINDOW_BORDERLESS           : SDL_WindowFlags : 0x0000000000000010;    /**< no window decoration */
+SDL_WINDOW_RESIZABLE            : SDL_WindowFlags : 0x0000000000000020;    /**< window can be resized */
+SDL_WINDOW_MINIMIZED            : SDL_WindowFlags : 0x0000000000000040;    /**< window is minimized */
+SDL_WINDOW_MAXIMIZED            : SDL_WindowFlags : 0x0000000000000080;    /**< window is maximized */
+SDL_WINDOW_MOUSE_GRABBED        : SDL_WindowFlags : 0x0000000000000100;    /**< window has grabbed mouse input */
+SDL_WINDOW_INPUT_FOCUS          : SDL_WindowFlags : 0x0000000000000200;    /**< window has input focus */
+SDL_WINDOW_MOUSE_FOCUS          : SDL_WindowFlags : 0x0000000000000400;    /**< window has mouse focus */
+SDL_WINDOW_EXTERNAL             : SDL_WindowFlags : 0x0000000000000800;    /**< window not created by SDL */
+SDL_WINDOW_MODAL                : SDL_WindowFlags : 0x0000000000001000;    /**< window is modal */
+SDL_WINDOW_HIGH_PIXEL_DENSITY   : SDL_WindowFlags : 0x0000000000002000;    /**< window uses high pixel density back buffer if possible */
+SDL_WINDOW_MOUSE_CAPTURE        : SDL_WindowFlags : 0x0000000000004000;    /**< window has mouse captured (unrelated to MOUSE_GRABBED) */
+SDL_WINDOW_MOUSE_RELATIVE_MODE  : SDL_WindowFlags : 0x0000000000008000;    /**< window has relative mode enabled */
+SDL_WINDOW_ALWAYS_ON_TOP        : SDL_WindowFlags : 0x0000000000010000;    /**< window should always be above others */
+SDL_WINDOW_UTILITY              : SDL_WindowFlags : 0x0000000000020000;    /**< window should be treated as a utility window, not showing in the task bar and window list */
+SDL_WINDOW_TOOLTIP              : SDL_WindowFlags : 0x0000000000040000;    /**< window should be treated as a tooltip and does not get mouse or keyboard focus, requires a parent window */
+SDL_WINDOW_POPUP_MENU           : SDL_WindowFlags : 0x0000000000080000;    /**< window should be treated as a popup menu, requires a parent window */
+SDL_WINDOW_KEYBOARD_GRABBED     : SDL_WindowFlags : 0x0000000000100000;    /**< window has grabbed keyboard input */
+SDL_WINDOW_VULKAN               : SDL_WindowFlags : 0x0000000010000000;    /**< window usable for Vulkan surface */
+SDL_WINDOW_METAL                : SDL_WindowFlags : 0x0000000020000000;    /**< window usable for Metal view */
+SDL_WINDOW_TRANSPARENT          : SDL_WindowFlags : 0x0000000040000000;    /**< window with transparent buffer */
+SDL_WINDOW_NOT_FOCUSABLE        : SDL_WindowFlags : 0x0000000080000000;    /**< window should not be focusable */
+EOF
