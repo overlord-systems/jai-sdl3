@@ -1,5 +1,5 @@
 #import "Basic";
-#import,file "../windows/windows.jai";
+#import,file "../module.jai";
 
 main :: () {
 
