@@ -8,7 +8,7 @@ main :: () {
 
     window: *SDL_Window;
     renderer: *SDL_Renderer;
-    success = SDL_CreateWindowAndRenderer("SDL3 from Jai", 1920, 1080, SDL_WINDOW_VULKAN, *window, *renderer);
+    success = SDL_CreateWindowAndRenderer("SDL3 from Jai", 1920, 1080, SDL_WINDOW_OPENGL, *window, *renderer);
     print("sdl3 window create status = %\n", success);
 
     is_running := true;
@@ -22,6 +22,10 @@ main :: () {
 
                 case xx SDL_EventType.QUIT;
                     is_running = false;
+
+                case xx SDL_EventType.KEY_DOWN;
+                    if ev.key.key == SDLK_ESCAPE
+                        is_running = false;
                 case;
             }
         }

@@ -4,6 +4,10 @@
 // jai generate.jai
 //
 
+/*
+File=SDL_video.h
+*/
+
 // From https://wiki.libsdl.org/SDL3/SDL_WindowFlags
 SDL_WINDOW_FULLSCREEN           : SDL_WindowFlags : 0x0000000000000001;    /**< window is in fullscreen mode */
 SDL_WINDOW_OPENGL               : SDL_WindowFlags : 0x0000000000000002;    /**< window usable with OpenGL context */
@@ -30,6 +34,82 @@ SDL_WINDOW_VULKAN               : SDL_WindowFlags : 0x0000000010000000;    /**< 
 SDL_WINDOW_METAL                : SDL_WindowFlags : 0x0000000020000000;    /**< window usable for Metal view */
 SDL_WINDOW_TRANSPARENT          : SDL_WindowFlags : 0x0000000040000000;    /**< window with transparent buffer */
 SDL_WINDOW_NOT_FOCUSABLE        : SDL_WindowFlags : 0x0000000080000000;    /**< window should not be focusable */
+
+/**
+ * Used to indicate that you don't care what the window position is.
+ *
+ * If you _really_ don't care, SDL_WINDOWPOS_UNDEFINED is the same, but always
+ * uses the primary display instead of specifying one.
+ *
+ * \param X the SDL_DisplayID of the display to use.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+// Original: #define SDL_WINDOWPOS_UNDEFINED_DISPLAY(X)  (SDL_WINDOWPOS_UNDEFINED_MASK|(X))
+SDL_WINDOWPOS_UNDEFINED_DISPLAY :: inline (display_id: SDL_DisplayID) -> SDL_DisplayID {
+    return SDL_WINDOWPOS_UNDEFINED_MASK | display_id;
+}
+
+/**
+ * Used to indicate that you don't care what the window position/display is.
+ *
+ * This always uses the primary display.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+// #define SDL_WINDOWPOS_UNDEFINED         SDL_WINDOWPOS_UNDEFINED_DISPLAY(0)
+SDL_WINDOWPOS_UNDEFINED :: #bake_arguments SDL_WINDOWPOS_UNDEFINED_DISPLAY(display_id = 0);
+
+/**
+ * A macro to test if the window position is marked as "undefined."
+ *
+ * \param X the window position value.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+// #define SDL_WINDOWPOS_ISUNDEFINED(X)    (((X)&0xFFFF0000) == SDL_WINDOWPOS_UNDEFINED_MASK)
+SDL_WINDOWPOS_ISUNDEFINED :: inline (display_id: SDL_DisplayID) -> bool {
+    return (display_id & 0xFFFF0000) == SDL_WINDOWPOS_UNDEFINED_MASK;
+}
+
+
+/**
+ * Used to indicate that the window position should be centered.
+ *
+ * SDL_WINDOWPOS_CENTERED is the same, but always uses the primary display
+ * instead of specifying one.
+ *
+ * \param X the SDL_DisplayID of the display to use.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+// #define SDL_WINDOWPOS_CENTERED_DISPLAY(X)  (SDL_WINDOWPOS_CENTERED_MASK|(X))
+SDL_WINDOWPOS_CENTERED_DISPLAY :: inline (display_id: SDL_DisplayID) -> SDL_DisplayID {
+    return SDL_WINDOWPOS_CENTERED_MASK | display_id;
+}
+
+/**
+ * Used to indicate that the window position should be centered.
+ *
+ * This always uses the primary display.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+// #define SDL_WINDOWPOS_CENTERED         SDL_WINDOWPOS_CENTERED_DISPLAY(0)
+SDL_WINDOWPOS_CENTERED :: #bake_arguments SDL_WINDOWPOS_CENTERED_DISPLAY(display_id = 0);
+
+/**
+ * A macro to test if the window position is marked as "centered."
+ *
+ * \param X the window position value.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+// #define SDL_WINDOWPOS_ISCENTERED(X)    \
+            // (((X)&0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK)
+SDL_WINDOWPOS_ISCENTERED :: inline (pos: u32) -> bool {
+    return (pos & 0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK;
+}
 
 
 
