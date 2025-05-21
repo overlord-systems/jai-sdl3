@@ -49,10 +49,10 @@ generate_bindings :: () -> bool {
     opts: Generate_Bindings_Options;
 
     {
-        using opts;
-        strip_flags = .FUNCTIONS_WITH_VALIST;
+        opts.strip_flags = .FUNCTIONS_WITH_VALIST;
 
         #if OS == .WINDOWS {
+
             output_filename = "windows/windows.jai";
 
             #if CPU == .X64 {
@@ -60,7 +60,7 @@ generate_bindings :: () -> bool {
                 FOOTER :: #string EOF
 sdl3 :: #library,no_dll "bin/x64/SDL3";
 EOF
-                array_add(*libpaths, "windows/bin/x64");
+                array_add(*opts.libpaths, "windows/bin/x64");
 
             } else #if CPU == .ARM64 {
 
@@ -68,35 +68,35 @@ EOF
 sdl3 :: #library,no_dll "bin/arm64/SDL3";
 EOF
 
-                array_add(*libpaths, "windows/bin/arm64");
+                array_add(*opts.libpaths, "windows/bin/arm64");
 
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }
 
             // DLL provided by user not in bin, so use our own footer not generated library declaration
-            footer = FOOTER;
-            generate_library_declarations = false;
+            opts.footer = FOOTER;
+            opts.generate_library_declarations = false;
 
         } /*else #if OS == .LINUX {
-            strip_flags = 0;
+            opts.strip_flags = 0;
             output_filename = "linux/linux.jai";
-            array_add(*libpaths, "linux/bin");
+            array_add(*opts.libpaths, "linux/bin");
         } else #if OS == .MACOS {
-            strip_flags = 0;
+            opts.strip_flags = 0;
             output_filename = "macos/macos.jai";
         }*/ else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);
         }
 
-        array_add(*libnames, "SDL3");
-        array_add(*include_paths, "include");
-        array_add(*source_files, "include/SDL3/SDL.h");
+        array_add(*opts.libnames, "SDL3");
+        array_add(*opts.include_paths, "include");
+        array_add(*opts.source_files, "include/SDL3/SDL.h");
 
         // array_add(*strip_prefixes, "");
 
-        visitor = sdl3_visitor;
-        generate_compile_time_struct_checks = false;
+        opts.visitor = sdl3_visitor;
+        opts.generate_compile_time_struct_checks = false;
     }
 
     return generate_bindings(opts, output_filename);
