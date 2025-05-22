@@ -56,7 +56,7 @@ EOF
             output_filename = "linux/linux.jai";
 
             FOOTER :: #string EOF
-libsdl3 :: #system_library "libSDL3";
+libsdl3 :: #library,system "libSDL3";
 EOF;
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
