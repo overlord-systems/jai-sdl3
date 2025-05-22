@@ -8,9 +8,11 @@ These bindings are 'pure', we don't add or change the interface to SDL3.
 
 Copy this into your modules folder, then:
 
-- Windows: Put the proper (x86/arm64) `SDL3.dll` next to your executable.
-- Linux: Ensure SDL3 binaries are installed on your system (Thanks to [Marvhus](https://github.com/marvhus))
-- MacOS: Not supported yet, but should be trivial to do if you have a Mac machine! (see contribution section)
+- **Windows**: Put the proper (x86/arm64) `SDL3.dll` next to your executable.
+- **Linux**: Ensure SDL3 binaries are installed on your system (Thanks to [Marvhus](https://github.com/marvhus))
+- **MacOS**: Not supported yet, but should be trivial to do if you have a Mac machine! (see contribution section)
+
+SDL supports a ton of platforms, so adding support for things like Android/iOS/etc should be possible.
 
 ## Notes
 
@@ -22,4 +24,4 @@ To fix this we hardcode some code in `generate.jai` that gets put at the top of 
 
 Want to support a new platform or found some missing enums/macros not generated? please feel free to send a PR!
 
-To support a new platform check `generate.jai` and replicate what's done in the Windows/Linux section for MacOS, then run `jai generate.jai`.
+To support a new platform check `generate.jai` and replicate what's done in the Windows/Linux section for your platform, then run `jai generate.jai`.
