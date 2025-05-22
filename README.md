@@ -8,7 +8,7 @@ These bindings are 'pure', we don't add or change the interface to SDL3.
 
 Copy this into your modules folder, then:
 
-- **Windows**: Put the proper (x86/arm64) `SDL3.dll` next to your executable.
+- **Windows**: Put the proper (x64/arm64) `SDL3.dll` next to your executable.
 - **Linux**: Ensure SDL3 binaries are installed on your system (Thanks to [Marvhus](https://github.com/marvhus))
 - **MacOS**: Not supported yet, but should be trivial to do if you have a Mac machine! (see contribution section)
 
