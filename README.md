@@ -1,6 +1,6 @@
 # jai-sdl3
 
-Jai bindings for [SDL3 3.2.14](https://github.com/libsdl-org/SDL/releases/tag/release-3.2.14) using the Bindings Generator.
+Jai bindings for [SDL3 v3.2.14](https://github.com/libsdl-org/SDL/releases/tag/release-3.2.14) using the Bindings Generator.
 
 These bindings are 'pure', we don't add or change the interface to SDL3.
 
