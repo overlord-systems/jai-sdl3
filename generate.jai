@@ -4,7 +4,7 @@ build :: () {
 
     set_build_options_dc(.{do_output=false});
 
-	options := get_build_options();
+    options := get_build_options();
 
     if !generate_bindings() {
         compiler_set_workspace_status(.FAILED);
@@ -19,9 +19,9 @@ generate_bindings :: () -> bool {
 
     {
         opts.header = HEADER;
-        opts.strip_flags = .FUNCTIONS_WITH_VALIST;
 
         #if OS == .WINDOWS {
+            opts.strip_flags = .FUNCTIONS_WITH_VALIST;
 
             output_filename = "windows/windows.jai";
 
@@ -48,18 +48,28 @@ EOF
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
 
-        } /*else #if OS == .LINUX {
-            opts.strip_flags = 0;
+            array_add(*opts.libnames, "SDL3");
+
+        } else #if OS == .LINUX {
+            opts.strip_flags = .FUNCTIONS_WITH_VALIST;
+
             output_filename = "linux/linux.jai";
-            array_add(*opts.libpaths, "linux/bin");
-        } else #if OS == .MACOS {
+
+            FOOTER :: #string EOF
+libsdl3 :: #system_library "libSDL3";
+EOF;
+            opts.footer = FOOTER;
+            opts.generate_library_declarations = false;
+
+            array_add(*opts.libnames, "libSDL3");
+
+        } /*else #if OS == .MACOS {
             opts.strip_flags = 0;
             output_filename = "macos/macos.jai";
         }*/ else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);
         }
 
-        array_add(*opts.libnames, "SDL3");
         array_add(*opts.include_paths, "include");
         array_add(*opts.source_files, "include/SDL3/SDL.h");
 
