@@ -10,7 +10,7 @@ Copy this into your modules folder, then:
 
 - **Windows**: Put the proper (x64/arm64) `SDL3.dll` next to your executable. Prebuilt DLLs [here](https://github.com/libsdl-org/SDL/releases/tag/release-3.2.14).
 - **Linux**: Ensure SDL3 binaries are installed on your system (thanks to @marvhus).
-- **MacOS**: Put the `arm64` dynamic library `libSDL3.dylib` (thanks to @4iwen).
+- **MacOS**: Just works. We bundle the `arm64` dynamic library `libSDL3.dylib` (thanks to @4iwen).
 
 SDL supports a ton of platforms, so adding support for things like Android/iOS/etc should be possible.
 
