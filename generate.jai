@@ -63,10 +63,25 @@ EOF;
 
             array_add(*opts.libnames, "libSDL3");
 
-        } /*else #if OS == .MACOS {
-            opts.strip_flags = 0;
+        } else #if OS == .MACOS {
+            opts.strip_flags = .FUNCTIONS_WITH_VALIST;
+
             output_filename = "macos/macos.jai";
-        }*/ else {
+
+            #if CPU == .ARM64 {
+                FOOTER :: #string EOF
+libsdl3 :: #library,system "libSDL3";
+EOF;
+                array_add(*opts.libpaths, "macos/bin/arm64");
+            } else {
+                assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
+            }
+
+            opts.footer = FOOTER;
+            opts.generate_library_declarations = false;
+
+            array_add(*opts.libnames, "libSDL3");     
+        } else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);
         }
 
