@@ -52,12 +52,12 @@ EOF
             output_filename = "linux/linux.jai";
 
             FOOTER :: #string EOF
-libsdl3 :: #library,system "libSDL3";
+libsdl3 :: #library,system "libSDL3.0";
 EOF;
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
 
-            array_add(*opts.libnames, "libSDL3");
+            array_add(*opts.libnames, "libSDL3.0");
 
         } else #if OS == .MACOS {
 
@@ -66,9 +66,9 @@ EOF;
 
             FOOTER :: #string EOF
 #if CPU == .X64 {
-    libsdl3 :: #library "bin/x64/libSDL3";
+    libsdl3 :: #library "bin/x64/libSDL3.0";
 } else #if CPU == .ARM64 {
-    libsdl3 :: #library "bin/arm64/libSDL3";
+    libsdl3 :: #library "bin/arm64/libSDL3.0";
 }
 EOF;
             #if CPU == .X64 {
@@ -82,7 +82,7 @@ EOF;
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
 
-            array_add(*opts.libnames, "libSDL3");
+            array_add(*opts.libnames, "libSDL3.0");
         } else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);
         }
