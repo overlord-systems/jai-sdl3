@@ -66,9 +66,9 @@ EOF;
 
             FOOTER :: #string EOF
 #if CPU == .X64 {
-    libsdl3 :: #library "bin/x64/libSDL3.0";
+    libsdl3 :: #library "bin/x64/libSDL3.0_dynamic";
 } else #if CPU == .ARM64 {
-    libsdl3 :: #library "bin/arm64/libSDL3.0";
+    libsdl3 :: #library "bin/arm64/libSDL3.0_dynamic";
 }
 EOF;
             #if CPU == .X64 {
@@ -82,6 +82,7 @@ EOF;
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
 
+            // We need the .a to bind but .dylib is used in runtime.
             array_add(*opts.libnames, "libSDL3.0");
         } else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);
