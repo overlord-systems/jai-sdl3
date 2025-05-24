@@ -70,7 +70,7 @@ EOF;
 
             #if CPU == .ARM64 {
                 FOOTER :: #string EOF
-libsdl3 :: #library,system "libSDL3";
+libsdl3 :: #library "bin/arm64/libSDL3.0";
 EOF;
                 array_add(*opts.libpaths, "macos/bin/arm64");
             } else {
