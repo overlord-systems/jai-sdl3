@@ -7,3 +7,6 @@
 *.DS_Store
 
 SDL3.dll
+
+tests/test
+tests/*dylib
