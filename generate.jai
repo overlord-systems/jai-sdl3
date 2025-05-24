@@ -66,15 +66,15 @@ EOF;
 
             FOOTER :: #string EOF
 #if CPU == .X64 {
-    libsdl3 :: #library "bin/x64/libSDL3.0";
+    libsdl3 :: #library "bin/x64/libSDL3";
 } else #if CPU == .ARM64 {
-    libsdl3 :: #library "bin/arm64/libSDL3.0";
+    libsdl3 :: #library "bin/arm64/libSDL3";
 }
 EOF;
             #if CPU == .X64 {
-                array_add(*opts.libpaths, "macos/bin/x64/libSDL3.0");
+                array_add(*opts.libpaths, "macos/bin/x64");
             } else #if CPU == .ARM64 {
-                array_add(*opts.libpaths, "macos/bin/arm64/libSDL3.0");
+                array_add(*opts.libpaths, "macos/bin/arm64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }
@@ -82,7 +82,7 @@ EOF;
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
 
-            array_add(*opts.libnames, "libSDL3.0");
+            array_add(*opts.libnames, "libSDL3");
         } else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);
         }

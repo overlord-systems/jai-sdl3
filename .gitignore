@@ -4,4 +4,6 @@
 *.exe
 *.dSYM
 
+*.DS_Store
+
 SDL3.dll
