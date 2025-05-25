@@ -10,9 +10,19 @@ Copy this into your modules folder, then:
 
 - **Windows**: Put the proper (x64/arm64) `SDL3.dll` next to your executable. Prebuilt DLLs [here](https://github.com/libsdl-org/SDL/releases/tag/release-3.2.14).
 - **Linux**: Ensure SDL3 binaries are installed on your system (thanks to @marvhus).
-- **MacOS**: Just works. We bundle the `arm64` dynamic library `libSDL3.dylib` (thanks to @4iwen).
+- **MacOS**: Place the `x86/arm64` dynamic library (download from [here](https://github.com/overlord-systems/jai-sdl3/releases/tag/v1.2_3.2.14)) next to your executable and make sure its called `libSDL3.0.dylib` (thanks to @4iwen).
 
 SDL supports a ton of platforms, so adding support for things like Android/iOS/etc should be possible.
+
+### MacOS Note
+
+On (some?) MacOS machines the generater **requires** a `.a` static library (it can't generate bindings from a dylib, we get weird errors), but compiling a jai program fails if we try to link to that same `.a` library.
+
+As such, we run the generator on the bundled `.a`, but the bindings link to the bundled `libSDL3.0_dynamic.dylib` and you are required to have `libSDL3.0.dylib` next to your executable.
+
+The reason we do this is to ensure jai uses the dynamic library when compiling. If we simply places `.a` and `.dylib` with the same name in one folder, jai will always pick the `.a` static library and compilation will fail.
+
+What the source of this mess is, and whether it will improve, is to be seen.
 
 ## Notes
 
