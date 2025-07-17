@@ -36228,4 +36228,4 @@ SDL_GetRevision :: () -> *u8 #foreign libsdl3;
 
 #import "Basic"; // For push_context
 
-libsdl3 :: #library,system "libSDL3";
+libsdl3 :: #library,system "libSDL3.0";

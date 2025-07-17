@@ -24403,9 +24403,9 @@ SDL_Event :: union {
     architectures) for this union, and GCC will use the alignment of the
     largest datatype within the union, which is 8 bytes on 64-bit
     architectures.
-    
+
     So... we'll add padding to force the size to be the same for both.
-    
+
     On architectures where pointers are 16 bytes, this needs rounding up to
     the next multiple of 16, 64, and on architectures where pointers are
     even larger the size of SDL_UserEvent will dominate as being 3 pointers.
@@ -29964,7 +29964,7 @@ SDL_hid_device_info :: struct {
 
     /** The USB interface which this logical device
     represents.
-    
+
     Valid only if the device is a USB HID device.
     Set to -1 in all other cases.
     */

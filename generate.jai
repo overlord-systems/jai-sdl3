@@ -37,14 +37,14 @@ EOF
             opts.generate_library_declarations = false;
 
             #if CPU == .X64 {
-                array_add(*opts.libpaths, "windows/bin/x64");
+                array_add(*opts.library_search_paths, "windows/bin/x64");
             } else #if CPU == .ARM64 {
-                array_add(*opts.libpaths, "windows/bin/arm64");
+                array_add(*opts.library_search_paths, "windows/bin/arm64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }
 
-            array_add(*opts.libnames, "SDL3");
+            array_add(*opts.libraries, .{filename="SDL3"});
 
         } else #if OS == .LINUX {
             opts.strip_flags = .FUNCTIONS_WITH_VALIST;
@@ -57,7 +57,7 @@ EOF;
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
 
-            array_add(*opts.libnames, "libSDL3.0");
+            array_add(*opts.libraries, .{filename="libSDL3.0"});
 
         } else #if OS == .MACOS {
 
@@ -72,9 +72,9 @@ EOF;
 }
 EOF;
             #if CPU == .X64 {
-                array_add(*opts.libpaths, "macos/bin/x64");
+                array_add(*opts.library_search_paths, "macos/bin/x64");
             } else #if CPU == .ARM64 {
-                array_add(*opts.libpaths, "macos/bin/arm64");
+                array_add(*opts.library_search_paths, "macos/bin/arm64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }
@@ -83,7 +83,7 @@ EOF;
             opts.generate_library_declarations = false;
 
             // We need the .a to bind but .dylib is used in runtime.
-            array_add(*opts.libnames, "libSDL3.0");
+            array_add(*opts.libraries, .{filename="libSDL3.0"});
         } else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);
         }

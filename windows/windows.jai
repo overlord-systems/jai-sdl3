@@ -36284,4 +36284,8 @@ SDL_GetRevision :: () -> *u8 #foreign sdl3;
 
 #import "Basic"; // For push_context
 
-sdl3 :: #library,no_dll "bin/x64/SDL3";
+#if CPU == .X64 {
+    sdl3 :: #library,no_dll "bin/x64/SDL3";
+} else #if CPU == .ARM64 {
+    sdl3 :: #library,no_dll "bin/arm64/SDL3";
+}
