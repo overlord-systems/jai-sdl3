@@ -52,12 +52,12 @@ EOF
             output_filename = "linux/linux.jai";
 
             FOOTER :: #string EOF
-libsdl3 :: #library,system "libSDL3.0";
+libsdl3 :: #library,system "libSDL3.so.0";
 EOF;
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
 
-            array_add(*opts.libraries, .{filename="libSDL3.0"});
+            array_add(*opts.libraries, .{filename="libSDL3.so.0"});
 
         } else #if OS == .MACOS {
 
