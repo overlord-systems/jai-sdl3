@@ -90,6 +90,7 @@ EOF;
 
         array_add(*opts.include_paths, "include");
         array_add(*opts.source_files, "include/SDL3/SDL.h");
+        array_add(*opts.source_files, "include/SDL3/SDL_main.h");
 
         // array_add(*strip_prefixes, "");
 
@@ -147,6 +148,12 @@ DECLARATIONS_TO_OMIT :: string.[
     "SDL_RectEmptyFloat",
     "SDL_RectsEqualEpsilon",
     "SDL_RectsEqualFloat",
+    "SDL_main",
+    "main",
+    "wmain",
+    "main1",
+    "WinMain",
+    "wWinMain",
 ];
 
 /*

@@ -5,3 +5,5 @@
 } else #if OS == .MACOS {
     #load "macos/macos.jai";
 }
+
+#load "sdl_callbacks.jai";
