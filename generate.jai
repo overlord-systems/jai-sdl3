@@ -1,10 +1,14 @@
 #run build();
 
+VULKAN_SUPPORT := false;
+
 build :: () {
 
     set_build_options_dc(.{do_output=false});
 
     options := get_build_options();
+    args := options.compile_time_command_line;
+    VULKAN_SUPPORT = array_find(args, "-vulkan");
 
     if !generate_bindings() {
         compiler_set_workspace_status(.FAILED);
@@ -91,6 +95,10 @@ EOF;
         array_add(*opts.include_paths, "include");
         array_add(*opts.source_files, "include/SDL3/SDL.h");
         array_add(*opts.source_files, "include/SDL3/SDL_main.h");
+        if VULKAN_SUPPORT {
+            array_add(*opts.source_files, "include/SDL3/SDL_vulkan.h");
+            opts.footer = sprint("#import \"Vulkan\";\n%", opts.footer);
+        }
 
         // array_add(*strip_prefixes, "");
 
@@ -104,6 +112,13 @@ EOF;
 sdl3_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_Visit_Result {
 
     if parent_decl return .RECURSE;
+
+    if VULKAN_SUPPORT {
+        if begins_with(decl.name, "Vk") {
+            decl.decl_flags |= .OMIT_FROM_OUTPUT;
+            return .STOP;
+        }
+    }
 
     if array_find(DECLARATIONS_TO_OMIT, decl.name) {
         decl.decl_flags |= .OMIT_FROM_OUTPUT;
@@ -121,6 +136,7 @@ sdl3_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_V
 #import "Check";
 #import "Bindings_Generator";
 #import "File";
+#import "String";
 
 DECLARATIONS_TO_OMIT :: string.[
     "_m_prefetch",
