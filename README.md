@@ -41,6 +41,16 @@ Due to current limitations in the bindings generator, especially around nested m
 
 To fix this we hardcode some code in `generate.jai` that gets put at the top of the generated bindings file. As the bindings generator matures we should be able to get incrementally get rid of these until the bindings are fully automated.
 
+## Vulkan support
+
+Vulkan is supported, but you have to import a Vulkan binding on your own. You can either use the stock vulkan binding by JBlow, generate your own vulkan binding using the binding generator, or use a binding generate from vk.xml like [this](https://github.com/drshapeless/vulkan-jai-binding).
+
+The vulkan support is default to be off. You can generate a binding with vulkan using command line args.
+
+```
+jai generate.jai - -vulkan
+```
+
 ## Contribution
 
 Want to support a new platform or found some missing enums/macros not generated? please feel free to send a PR!
