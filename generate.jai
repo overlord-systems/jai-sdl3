@@ -1,6 +1,6 @@
 #run build();
 
-VULKAN_SUPPORT := false;
+vulkan_support := false;
 
 build :: () {
 
@@ -8,7 +8,7 @@ build :: () {
 
     options := get_build_options();
     args := options.compile_time_command_line;
-    VULKAN_SUPPORT = array_find(args, "-vulkan");
+    vulkan_support = array_find(args, "-vulkan");
 
     if !generate_bindings() {
         compiler_set_workspace_status(.FAILED);
@@ -93,7 +93,7 @@ EOF;
         array_add(*opts.include_paths, "include");
         array_add(*opts.source_files, "include/SDL3/SDL.h");
         array_add(*opts.source_files, "include/SDL3/SDL_main.h");
-        if VULKAN_SUPPORT {
+        if vulkan_support {
             array_add(*opts.source_files, "include/SDL3/SDL_vulkan.h");
             opts.footer = sprint("#import \"Vulkan\";\n%", opts.footer);
         }
@@ -113,7 +113,7 @@ sdl3_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_V
 
     // if parent_decl return .RECURSE;
 
-    if VULKAN_SUPPORT {
+    if vulkan_support {
         if begins_with(decl.name, "Vk") {
             decl.decl_flags |= .OMIT_FROM_OUTPUT;
             return .STOP;
