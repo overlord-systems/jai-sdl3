@@ -96,9 +96,9 @@ load_shader_file :: (device: *SDL_GPUDevice, filename: string) -> code: *void, c
     
     if ends_with(filename, ".vert") {
 	stage = .SDL_GPU_SHADERSTAGE_VERTEX;
-    } else  if ends_with(filename, ".frag") {
+    } else if ends_with(filename, ".frag") {
 	stage = .SDL_GPU_SHADERSTAGE_FRAGMENT;
-    } else {
+    } else if !ends_with(filename, ".comp") {
 	log("Invalid shader stage, shader files must have am extension of .vert or .frag");
 	return null, 0, stage, SDL_GPU_SHADERFORMAT_INVALID, "";
     }

@@ -5,7 +5,7 @@
 #load("basic_triangle.jai");
 #load("depth_sampler.jai");
 #load("instanced_indexed.jai");
-
+#load("compute_uniforms.jai");
 
 Args :: struct {
     name := "";
@@ -22,6 +22,7 @@ main :: () {
     array_add(*examples, basic_triangle_example);
     array_add(*examples, depth_sampler_example);
     array_add(*examples, instanced_indexed_example);
+    array_add(*examples, compute_uniforms_example);
     
     defer array_free(examples);
 
