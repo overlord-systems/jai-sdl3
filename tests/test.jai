@@ -3,12 +3,12 @@
 
 main :: () {
 
-    success := SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    success := SDL_Init(.VIDEO | .AUDIO);
     print("sdl3 init status = %\n", success);
 
     window: *SDL_Window;
     renderer: *SDL_Renderer;
-    success = SDL_CreateWindowAndRenderer("SDL3 from Jai", 1920, 1080, SDL_WINDOW_OPENGL, *window, *renderer);
+    success = SDL_CreateWindowAndRenderer("SDL3 from Jai", 1920, 1080, .OPENGL, *window, *renderer);
     print("sdl3 window create status = %\n", success);
 
     is_running := true;
