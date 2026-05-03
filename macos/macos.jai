@@ -1291,7 +1291,7 @@ SDL_MAJOR_VERSION :: 3;
 
 SDL_MINOR_VERSION :: 2;
 
-SDL_MICRO_VERSION :: 14;
+SDL_MICRO_VERSION :: 16;
 
 /**
 * A signed 8-bit integer type.
@@ -4449,7 +4449,7 @@ SDL_atanf :: (x: float) -> float #foreign libsdl3;
 *
 * Domain: `-INF <= x <= INF`, `-INF <= y <= INF`
 *
-* Range: `-Pi/2 <= y <= Pi/2`
+* Range: `-Pi <= y <= Pi`
 *
 * This function operates on double-precision floating point values, use
 * SDL_atan2f for single-precision floats.
@@ -4485,7 +4485,7 @@ SDL_atan2 :: (y: float64, x: float64) -> float64 #foreign libsdl3;
 *
 * Domain: `-INF <= x <= INF`, `-INF <= y <= INF`
 *
-* Range: `-Pi/2 <= y <= Pi/2`
+* Range: `-Pi <= y <= Pi`
 *
 * This function operates on single-precision floating point values, use
 * SDL_atan2 for double-precision floats.
@@ -11598,7 +11598,7 @@ SDL_PackedLayout :: enum u32 {
 *   ABGR32, define a platform-independent encoding into bytes in the order
 *   specified. For example, in RGB24 data, each pixel is encoded in 3 bytes
 *   (red, green, blue) in that order, and in ABGR32 data, each pixel is
-*   encoded in 4 bytes alpha, blue, green, red) in that order. Use these
+*   encoded in 4 bytes (alpha, blue, green, red) in that order. Use these
 *   names if the property of a format that is important to you is the order
 *   of the bytes in memory or on disk.
 * - Names with a bit count per component, such as ARGB8888 and XRGB1555, are
@@ -13924,10 +13924,11 @@ SDL_BlitSurfaceUncheckedScaled :: (src: *SDL_Surface, srcrect: *SDL_Rect, dst: *
 *
 * \param src the SDL_Surface structure to be copied from.
 * \param srcrect the SDL_Rect structure representing the rectangle to be
-*                copied, may not be NULL.
+*                copied, or NULL to copy the entire surface.
 * \param dst the SDL_Surface structure that is the blit target.
 * \param dstrect the SDL_Rect structure representing the target rectangle in
-*                the destination surface, may not be NULL.
+*                the destination surface, or NULL to fill the entire
+*                destination surface.
 * \param scaleMode the SDL_ScaleMode to be used.
 * \returns true on success or false on failure; call SDL_GetError() for more
 *          information.
@@ -36149,10 +36150,6 @@ SDL_GDKSuspendComplete :: () -> void #foreign libsdl3;
 
 #scope_file
 
-#import "Basic"; // For push_context
+#import "Basic"; // For print_to_builder
 
-#if CPU == .X64 {
-    libsdl3 :: #library "bin/x64/libSDL3.0_dynamic";
-} else #if CPU == .ARM64 {
-    libsdl3 :: #library "bin/arm64/libSDL3.0_dynamic";
-}
+    libsdl3 :: #library "bin/arm64/libSDL3.0_dynamic"; // Universal binary

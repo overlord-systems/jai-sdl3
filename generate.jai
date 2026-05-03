@@ -67,15 +67,10 @@ EOF;
             opts.strip_flags = .FUNCTIONS_WITH_VALIST;
 
             FOOTER :: #string EOF
-#if CPU == .X64 {
-    libsdl3 :: #library "bin/x64/libSDL3.0_dynamic";
-} else #if CPU == .ARM64 {
-    libsdl3 :: #library "bin/arm64/libSDL3.0_dynamic";
-}
+    libsdl3 :: #library "bin/arm64/libSDL3.0_dynamic"; // Universal binary
 EOF;
-            #if CPU == .X64 {
-                array_add(*opts.library_search_paths, "macos/bin/x64");
-            } else #if CPU == .ARM64 {
+            // We have a universal binary
+            #if CPU == .ARM64 || CPU == .X64 {
                 array_add(*opts.library_search_paths, "macos/bin/arm64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
@@ -98,8 +93,6 @@ EOF;
             opts.footer = sprint("#import \"Vulkan\";\n%", opts.footer);
         }
 
-        // array_add(*strip_prefixes, "");
-
         opts.visitor = sdl3_visitor;
         opts.generate_compile_time_struct_checks = false;
     }
@@ -110,8 +103,6 @@ EOF;
 event_type_decl: *Enum;
 
 sdl3_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_Visit_Result {
-
-    // if parent_decl return .RECURSE;
 
     if vulkan_support {
         if begins_with(decl.name, "Vk") {
