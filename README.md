@@ -8,9 +8,9 @@ These bindings are 'pure', we don't add or change the interface to SDL3.
 
 Copy this into your modules folder, then:
 
-- **Windows**: Put the proper (x64/arm64) DLL next to your executable and make sure its called `SDL3.dll`. Prebuilt DLLs [here](https://github.com/overlord-systems/jai-sdl3/releases/tag/v1.3_3.4.4).
+- **Windows**: Put the proper (x64/arm64) DLL next to your executable and make sure its called `SDL3.dll`. Prebuilt DLLs [here](https://github.com/overlord-systems/jai-sdl3/releases/tag/v1.5_3.4.4).
 - **Linux**: Ensure SDL3 binaries are installed on your system (thanks to @marvhus).
-- **MacOS**: Place the `x86/arm64` universal dynamic library (download from [here](https://github.com/overlord-systems/jai-sdl3/releases/tag/v1.3_3.2.14)) next to your executable and make sure its called `libSDL3.0.dylib` (thanks to @4iwen).
+- **MacOS**: Place the `x86/arm64` universal dynamic library (download from [here](https://github.com/overlord-systems/jai-sdl3/releases/tag/v1.5_3.2.14)) next to your executable and make sure its called `libSDL3.0.dylib` (thanks to @4iwen).
 
 SDL supports a ton of platforms, so adding support for things like Android/iOS/etc should be possible.
 
