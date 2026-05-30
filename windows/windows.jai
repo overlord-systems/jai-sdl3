@@ -34917,9 +34917,6 @@ SDL_GetStorageSpaceRemaining :: (storage: *SDL_Storage) -> Uint64 #foreign sdl3;
 */
 SDL_GlobStorageDirectory :: (storage: *SDL_Storage, path: *u8, pattern: *u8, flags: SDL_GlobFlags, count: *s32) -> **u8 #foreign sdl3;
 
-tagMSG :: struct {}
-MSG :: tagMSG;
-
 /**
 * A callback to be used with SDL_SetWindowsMessageHook.
 *
@@ -34942,7 +34939,7 @@ MSG :: tagMSG;
 * \sa SDL_SetWindowsMessageHook
 * \sa SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP
 */
-SDL_WindowsMessageHook :: #type (userdata: *void, msg: *MSG) -> bool #c_call;
+// SDL_WindowsMessageHook defined in footer (MSG omitted; see generate.jai)
 
 /**
 * Set a callback for every Windows message, run before TranslateMessage().
@@ -36273,9 +36270,6 @@ SDL_UnregisterApp :: () -> void #foreign sdl3;
 */
 SDL_GDKSuspendComplete :: () -> void #foreign sdl3;
 
-HINSTANCE__ :: struct {}
-HINSTANCE :: *HINSTANCE__;
-
 #scope_file
 
 #import "Basic"; // For print_to_builder
@@ -36285,3 +36279,7 @@ HINSTANCE :: *HINSTANCE__;
 } else #if CPU == .ARM64 {
     sdl3 :: #library,no_dll "bin/arm64/SDL3";
 }
+// MSG and HINSTANCE conflict with Jai's Windows module so are omitted from generated
+// output. SDL_WindowsMessageHook is redefined here using *void for the msg parameter
+// (same ABI; cast to *MSG from Jai's Windows module if field access is needed).
+SDL_WindowsMessageHook :: #type (userdata: *void, msg: *void) -> bool #c_call;

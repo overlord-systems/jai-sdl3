@@ -33,6 +33,10 @@ generate_bindings :: () -> bool {
 } else #if CPU == .ARM64 {
     sdl3 :: #library,no_dll "bin/arm64/SDL3";
 }
+// MSG and HINSTANCE conflict with Jai's Windows module so are omitted from generated
+// output. SDL_WindowsMessageHook is redefined here using *void for the msg parameter
+// (same ABI; cast to *MSG from Jai's Windows module if field access is needed).
+SDL_WindowsMessageHook :: #type (userdata: *void, msg: *void) -> bool #c_call;
 EOF
             // DLL provided by user not in bin, so use our own footer not generated library declaration
             opts.footer = FOOTER;
@@ -54,7 +58,7 @@ EOF
             output_filename = "linux/linux.jai";
 
             FOOTER :: #string EOF
-libsdl3 :: #library,system "libSDL3.so.0";
+// libsdl3 is declared in module.jai (conditionally on USE_SYSTEM_LIBRARY module parameter).
 EOF;
             opts.footer = FOOTER;
             opts.generate_library_declarations = false;
@@ -167,6 +171,25 @@ sdl3_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_V
 DECLARATIONS_TO_OMIT :: string.[
     "_m_prefetch",
     "__debugbreak",
+
+    // SDL_WINDOWPOS_* are #define macros converted to inline functions by the generator,
+    // but they are handcrafted as cross-platform inline procs in module.jai to avoid
+    // the platform files generating conflicting duplicates.
+    "SDL_WINDOWPOS_UNDEFINED_DISPLAY",
+    "SDL_WINDOWPOS_UNDEFINED",
+    "SDL_WINDOWPOS_ISUNDEFINED",
+    "SDL_WINDOWPOS_CENTERED_DISPLAY",
+    "SDL_WINDOWPOS_CENTERED",
+    "SDL_WINDOWPOS_ISCENTERED",
+
+    // Windows types that conflict with Jai's built-in Windows module.
+    // SDL_WindowsMessageHook is redefined in the Windows footer using *void for the
+    // msg parameter to avoid taking a dependency on Jai's Windows module.
+    "HINSTANCE__",
+    "HINSTANCE",
+    "tagMSG",
+    "MSG",
+    "SDL_WindowsMessageHook",
 
     /*
     Those are force inlined functions defined in the headers, so they don't appear in the library and so bindings generator complains.
