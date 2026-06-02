@@ -1,6 +1,21 @@
+// Set USE_SYSTEM_LIBRARY=true to link against the system libSDL3.so.0 instead of
+// the prebuilt library bundled in linux/bin/x64/.
+// Has no effect on Windows or macOS (those always use their bundled libraries).
+#module_parameters (USE_SYSTEM_LIBRARY := false);
+
 #if OS == .WINDOWS {
     #load "windows/windows.jai";
 } else #if OS == .LINUX {
+    // libsdl3 declared here (before #load) so linux.jai foreign declarations can see it,
+    // and so the path resolves relative to module.jai rather than linux/linux.jai.
+    #if USE_SYSTEM_LIBRARY {
+        libsdl3 :: #library,system "libSDL3.so.0";
+    } else {
+        // "libSDL3" — Jai appends .so, giving libSDL3.so (the linker name).
+        // The SONAME embedded in the file is libSDL3.so.0; first.jai copies it
+        // next to the executable under that name so the dynamic linker finds it.
+        libsdl3 :: #library "linux/bin/x64/libSDL3";
+    }
     #load "linux/linux.jai";
 } else #if OS == .MACOS {
     #load "macos/macos.jai";
@@ -123,3 +138,41 @@ SDL_InitFlags :: enum_flags u32 {
     SENSOR   :: 0x00008000;
     CAMERA   :: 0x00010000;
 }
+
+// SDL_WINDOW_* typed constants — same values as SDL_WindowFlags enum members,
+// provided as standalone identifiers for cross-platform source compatibility.
+SDL_WINDOW_FULLSCREEN          : SDL_WindowFlags : 0x0000000000000001;
+SDL_WINDOW_OPENGL              : SDL_WindowFlags : 0x0000000000000002;
+SDL_WINDOW_OCCLUDED            : SDL_WindowFlags : 0x0000000000000004;
+SDL_WINDOW_HIDDEN              : SDL_WindowFlags : 0x0000000000000008;
+SDL_WINDOW_BORDERLESS          : SDL_WindowFlags : 0x0000000000000010;
+SDL_WINDOW_RESIZABLE           : SDL_WindowFlags : 0x0000000000000020;
+SDL_WINDOW_MINIMIZED           : SDL_WindowFlags : 0x0000000000000040;
+SDL_WINDOW_MAXIMIZED           : SDL_WindowFlags : 0x0000000000000080;
+SDL_WINDOW_MOUSE_GRABBED       : SDL_WindowFlags : 0x0000000000000100;
+SDL_WINDOW_INPUT_FOCUS         : SDL_WindowFlags : 0x0000000000000200;
+SDL_WINDOW_MOUSE_FOCUS         : SDL_WindowFlags : 0x0000000000000400;
+SDL_WINDOW_EXTERNAL            : SDL_WindowFlags : 0x0000000000000800;
+SDL_WINDOW_MODAL               : SDL_WindowFlags : 0x0000000000001000;
+SDL_WINDOW_HIGH_PIXEL_DENSITY  : SDL_WindowFlags : 0x0000000000002000;
+SDL_WINDOW_MOUSE_CAPTURE       : SDL_WindowFlags : 0x0000000000004000;
+SDL_WINDOW_MOUSE_RELATIVE_MODE : SDL_WindowFlags : 0x0000000000008000;
+SDL_WINDOW_ALWAYS_ON_TOP       : SDL_WindowFlags : 0x0000000000010000;
+SDL_WINDOW_UTILITY             : SDL_WindowFlags : 0x0000000000020000;
+SDL_WINDOW_TOOLTIP             : SDL_WindowFlags : 0x0000000000040000;
+SDL_WINDOW_POPUP_MENU          : SDL_WindowFlags : 0x0000000000080000;
+SDL_WINDOW_KEYBOARD_GRABBED    : SDL_WindowFlags : 0x0000000000100000;
+SDL_WINDOW_VULKAN              : SDL_WindowFlags : 0x0000000010000000;
+SDL_WINDOW_METAL               : SDL_WindowFlags : 0x0000000020000000;
+SDL_WINDOW_TRANSPARENT         : SDL_WindowFlags : 0x0000000040000000;
+SDL_WINDOW_NOT_FOCUSABLE       : SDL_WindowFlags : 0x0000000080000000;
+
+// SDL_INIT_* typed constants — same values as SDL_InitFlags enum members.
+SDL_INIT_AUDIO    : SDL_InitFlags : 0x00000010;
+SDL_INIT_VIDEO    : SDL_InitFlags : 0x00000020;
+SDL_INIT_JOYSTICK : SDL_InitFlags : 0x00000200;
+SDL_INIT_HAPTIC   : SDL_InitFlags : 0x00001000;
+SDL_INIT_GAMEPAD  : SDL_InitFlags : 0x00002000;
+SDL_INIT_EVENTS   : SDL_InitFlags : 0x00004000;
+SDL_INIT_SENSOR   : SDL_InitFlags : 0x00008000;
+SDL_INIT_CAMERA   : SDL_InitFlags : 0x00010000;
