@@ -176,3 +176,11 @@ SDL_INIT_GAMEPAD  : SDL_InitFlags : 0x00002000;
 SDL_INIT_EVENTS   : SDL_InitFlags : 0x00004000;
 SDL_INIT_SENSOR   : SDL_InitFlags : 0x00008000;
 SDL_INIT_CAMERA   : SDL_InitFlags : 0x00010000;
+
+
+/**
+ * Convenience function for logging.
+ */   
+SDL_GetErrorString :: inline () -> string {
+    return to_string(SDL_GetError());
+}
